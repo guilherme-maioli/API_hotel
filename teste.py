@@ -1,0 +1,1 @@
+from resources.hotel import Hoteis
