@@ -1,11 +1,13 @@
 from sql_alchemy import banco
 from flask import request, url_for
 from requests import post
+from key.keys import MAILGUN_API_KEY, MAILGUN_DOMAIN
 
-MAILGUN_DOMAIN = "sandbox7644a473aaf9476c81978c1a278661aa.mailgun.org"
-MAILGUN_API_KEY = "29f2f60ccdd60f93b6f86322a393efa0-602cc1bf-7e293aa9"
+DOMAIN_FOR_SEND_EMAIL = MAILGUN_DOMAIN 
+KEY_FOR_SEND_EMAIL = MAILGUN_API_KEY
+
 FROM_TITLE = 'NO-REPLY'
-FROM_EMAIL = 'no-reply@restapimaiao.com'
+FROM_EMAIL = 'no-reply@maiao.com'
 
 class UserModel(banco.Model):
 
@@ -29,8 +31,8 @@ class UserModel(banco.Model):
 		# http://127.0.0.1:5000/confirmacao/1
 		link = request.url_root[:-1] + url_for('userconfirm', user_id=self.user_id)
 				
-		return post('https://api.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN),
-					auth=('api', MAILGUN_API_KEY),
+		return post('https://api.mailgun.net/v3/{}/messages'.format(DOMAIN_FOR_SEND_EMAIL),
+					auth=('api', KEY_FOR_SEND_EMAIL),
 					data={  'from': '{} <{}>'.format(FROM_TITLE, FROM_EMAIL), 
 							'to': self.email,
 							'subject': 'Confirmação de Cadastro',
